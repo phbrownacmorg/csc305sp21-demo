@@ -1,5 +1,10 @@
 <h2>List users</h2>
 
-<p>Regrettably, at this time we have no users to list.</p>
+<table>
+    <tr><th>ID</th><th>First name</th><th>Last name</th></tr>
+    {{#each passengers}}
+    <tr><td>{{this.PsgrID}}</td><td>{{this.FirstName}}</td><td>{{this.LastName}}</td></tr>
+    {{/each}}
+</table>
 
 {{> nextaction}}

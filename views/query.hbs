@@ -1,5 +1,10 @@
 <h2>User details for {{first_name}} {{last_name}}</h2>
 
-<p>No details available at this time.</p>
+<table>
+    <tr><th>Key</th><th>Value</th>
+    {{#each person}}
+    <tr><td>{{@key}}</td><td>{{this}}</td></tr>
+    {{/each}}
+</table>
 
 {{> nextaction}}
