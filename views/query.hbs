@@ -1,4 +1,4 @@
-<h2>User details for {{first_name}} {{last_name}}</h2>
+<h2>User details for {{FirstName}} {{LastName}}</h2>
 
 {{#if person}}
 <table>
@@ -12,4 +12,6 @@
 <p>No passenger by that name was found in the database.</p>
 {{/unless}}
 
-{{> nextaction}}
+<h2>Next action</h2>
+
+{{> whoareyou fullform=true row=person}}

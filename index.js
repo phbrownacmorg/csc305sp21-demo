@@ -45,14 +45,11 @@ function closeDB(database) {
     });
 }
 
+
 // Give the app a handler for a GET request to
 //   the root of the document tree.  The app
 //   handler takes the request and response
 //   objects as arguments.
-//app.get('/', (req, res) => {
-//  res.send('Hello CSC305!')
-//});
-
 app.get('/', (req, res) => {
     let db = openDB();
     if (!req.query.form_submission) {
@@ -62,24 +59,82 @@ app.get('/', (req, res) => {
     else if (req.query.to_do === 'query') {
         sql = "select * from Passengers where FirstName=$first and LastName=$last;";
         db.get(sql, { 
-                $first: req.query.first_name, 
-                $last: req.query.last_name
+                $first: req.query.FirstName, 
+                $last: req.query.LastName
             }, (err, row) => {
             if (err) {
                 throw err;
             }
             console.log(row);
             res.render('query', {
-                first_name:req.query.first_name,
-                last_name:req.query.last_name,
+                FirstName:req.query.FirstName,
+                LastName:req.query.LastName,
                 person: row
             });
         });
     }
     else if (req.query.to_do === 'add') {
-        res.render('adduser', {
-             first_name:req.query.first_name,
-             last_name:req.query.last_name
+        let sql = 'insert into Passengers(FirstName, LastName) values ($first, $last);';
+        db.run(sql, {
+            $first: req.query.FirstName,
+            $last: req.query.LastName
+            }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('User added');
+                res.render('adduser', {
+                    FirstName:req.query.FirstName,
+                    LastName:req.query.LastName
+            });
+        });
+    }
+    else if (req.query.to_do === 'delete') {
+        let sql = 'delete from Passengers where FirstName=$first and LastName=$last';
+        db.run(sql, {
+            $first: req.query.FirstName,
+            $last: req.query.LastName
+            }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('deleted');
+                res.render('deluser', {
+                    FirstName:req.query.FirstName,
+                    LastName:req.query.LastName
+                });
+            });
+    }
+    else if (req.query.to_do === 'update') {
+        let sql = 'update Passengers set Phone=$phone, StreetAddress=$street, StreetLine2=$line2, City=$city, State=$state, Zip=$zip where PsgrID=$psgrid;';
+        db.run(sql, {
+            $phone: req.query.Phone,
+            $street: req.query.StreetAddress,
+            $line2: req.query.StreetLine2,
+            $city: req.query.City,
+            $state: req.query.State,
+            $zip: req.query.Zip,
+            $psgrid: req.query.PsgrID
+            }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('updated');
+            });
+        sql = "select * from Passengers where FirstName=$first and LastName=$last;";
+        db.get(sql, { 
+                $first: req.query.FirstName, 
+                $last: req.query.LastName
+            }, (err, row) => {
+            if (err) {
+                throw err;
+            }
+            console.log(row);
+            res.render('query', {
+                FirstName:req.query.FirstName,
+                LastName:req.query.LastName,
+                person: row
+            });
         });
     }
     else { // List users
@@ -87,13 +142,16 @@ app.get('/', (req, res) => {
         db.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
-            }
-            //console.log(rows);
+            }            //console.log(rows);
             res.render('listusers', {passengers: rows});
         })
     }
     closeDB(db);
 });
+
+//app.get('/', (req, res) => {
+//  res.send('Hello CSC305!')
+//});
 
 // app.get('/', function (req, res) {
 //     console.log('Initial page load');
@@ -105,8 +163,8 @@ app.get('/', (req, res) => {
 //     else {
 //         console.log('Form submission');
 //         response = {
-//             first_name:req.query.first_name,
-//             last_name:req.query.last_name
+//             FirstName:req.query.FirstName,
+//             LastName:req.query.LastName
 //         };
 //         console.log(response);
 //         res.end('<p>' + JSON.stringify(response) + '</p>');
@@ -118,4 +176,3 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
   console.log('server started');
 });
-

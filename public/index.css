@@ -1,0 +1,27 @@
+span.flag::before {
+    content: "*";
+    color: red;
+}
+
+span.flag.valid::before {
+    content: "\2713";
+    color: green;
+}
+
+input:not(:required) + span.flag {
+    display: none;
+}
+
+input:required + span.flag {
+    display: inline;
+}
+
+input:required:valid + span.flag::before {
+    content: "\2713";
+    color: green;
+}
+
+select:required:valid + span.flag::before {
+    content: "\2713";
+    color: green;
+}

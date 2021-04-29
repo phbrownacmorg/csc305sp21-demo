@@ -1,12 +1,43 @@
 <form action = "/" method = "GET">        
     <input type="hidden" name="form_submission" value="true" />
-    <select name="to_do">
-        <option value="">&mdash;Select an action&mdash;</option>
-        <option value="list">List users</option>
-        <option value="add">Add a user</option>
-        <option value="query">User details</option>
-    </select> <br />
-    <label>First Name:</label> <input type = "text" name = "first_name">  <br />
-    <label>Last Name:</label> <input type = "text" name = "last_name"> <br />
+    
+    <div id="basics">
+        <div>
+            <select name="to_do" required onchange="updateForm(this.form);">
+                <option value="">&mdash;Select an action&mdash;</option>
+                <option value="list">List users</option>
+                <option value="query">User details</option>
+                <option value="add">Add a user</option>
+                <option value="delete">Delete a user</option>
+                {{#if fullform}}
+                <option value="update">Update user data</option>
+                {{/if}}
+            </select><span class="flag"></span>
+        </div>
+        <fieldset class="basics">
+            <legend>Basic info</legend>
+            <div>
+                <label>First Name:</label>
+                <input type = "text" name = "FirstName"
+                {{#if FirstName}}
+                value="{{FirstName}}"
+                {{/if}}
+                >
+                <span class="flag"></span>
+            </div>
+            <div>
+                <label>Last Name:</label>
+                <input type = "text" name = "LastName"
+                {{#if LastName}}
+                value="{{LastName}}"
+                {{/if}}
+                >
+                <span class="flag"></span>
+            </div>
+        </fieldset>
+    </div>
+    {{#if fullform}}
+    {{> formdetails row=row}}
+    {{/if}}
     <input type = "submit" value = "Submit">
 </form>
